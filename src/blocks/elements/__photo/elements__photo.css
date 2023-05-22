@@ -1,0 +1,10 @@
+.elements__photo {
+  border-radius: 10px 10px 0 0;
+  width: 100%;
+  height: 282px;
+  object-fit: cover;
+  display: block;
+  cursor: pointer;
+  grid-area: photo;
+  transition: 1s;
+}

@@ -1,0 +1,10 @@
+.elements__like-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  margin: 22px 20px;
+  justify-self: end;
+  grid-area: like;
+
+}

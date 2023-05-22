@@ -1,0 +1,11 @@
+.elements__item {
+  border-radius: 10px;
+  background-color: #fff;
+  display: grid;
+  grid-template-areas: 'photo photo'
+  'title like';
+  grid-template-columns: 1fr min-content;
+  align-items: center;
+  box-sizing: border-box;
+  position: relative;
+}

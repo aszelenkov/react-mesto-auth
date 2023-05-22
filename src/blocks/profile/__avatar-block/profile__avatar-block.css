@@ -1,0 +1,26 @@
+.profile__avatar-block {
+  position: relative;
+  margin-right: 30px;
+}
+
+.profile__avatar-block:hover::before {
+position: absolute;
+content: '';
+width: 120px;
+height: 120px;
+top: 0;
+left: 0;
+background-color: rgba(0, 0, 0, 0.8);
+background-image: url(../../../images/vector_edit_avatar.svg);
+background-repeat: no-repeat;
+background-size: 26px;
+background-position: center;
+cursor: pointer;
+}
+
+@media screen and (max-width: 730px) {
+  .profile__avatar-block {
+    margin-right: 0;
+    gap: 6px 10px;
+  }
+}

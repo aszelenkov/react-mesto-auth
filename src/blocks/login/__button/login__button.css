@@ -1,0 +1,10 @@
+.login__button {
+  background-color: #fff;
+  color: #000;
+  margin-top: 216px;
+  transition: opacity .3s ease;
+}
+
+.login__button:hover {
+  opacity: .85;
+}

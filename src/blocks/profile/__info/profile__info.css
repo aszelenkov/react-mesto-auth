@@ -1,0 +1,16 @@
+.profile__info {
+  margin-right: 30px;
+  display: grid;
+  grid-template-areas:
+  'name edit-button'
+  'about .';
+  gap: 7px 18px;
+  align-items: baseline;
+}
+
+@media screen and (max-width: 730px) {
+  .profile__info {
+    margin: 26px 19px 33px;
+    gap: 7px 10px;
+  }
+}

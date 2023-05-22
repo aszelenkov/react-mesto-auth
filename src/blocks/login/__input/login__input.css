@@ -1,0 +1,13 @@
+.login__input {
+  margin-top: 50px;
+  padding-bottom: 0;
+  line-height: 30px;
+  font-weight: 500;
+  color: #fff;
+  border-bottom: 2px solid #ccc;
+  background: none;
+}
+
+.login__input:nth-child(n+1) {
+	margin-top: 30px;
+}
