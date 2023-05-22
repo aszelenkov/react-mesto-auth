@@ -1,5 +1,5 @@
 .login__input {
-  margin-top: 50px;
+  margin: 0;
   padding-bottom: 0;
   line-height: 30px;
   font-weight: 500;
@@ -8,6 +8,6 @@
   background: none;
 }
 
-.login__input:nth-child(n+1) {
+.login__input:nth-last-of-type {
 	margin-top: 30px;
 }

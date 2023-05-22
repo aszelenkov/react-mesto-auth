@@ -153,6 +153,7 @@ function App() {
     .then((data) => {
         setLoggedIn(true);
         localStorage.setItem("token", data.token);
+        setEmail(email);
         navigate("/");
       })
       .catch((err) => {
@@ -188,7 +189,7 @@ function App() {
 
   useEffect(() => {
     handleTokenCheck();
-  }, [handleTokenCheck, loggedIn]);
+  }, [handleTokenCheck]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -231,9 +232,9 @@ function App() {
           }
         />
         <Route 
-          path='/'
+          path='*'
           element={<Navigate to="sign-in" /> }
-        />      
+        />
       </Routes>
 
       {loggedIn && <Footer />}
@@ -277,6 +278,8 @@ function App() {
         isOpen={popups.isInfoTooltipPopupOpen}
         isSuccess={isSuccess}
         onClose={closeAllPopups}
+        successMessage="Вы успешно зарегистрировались!" 
+        errorMessage="Что-то пошло не так! Попробуйте еще раз."
       />
       
     </div>

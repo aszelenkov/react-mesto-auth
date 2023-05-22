@@ -1,45 +1,58 @@
-import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useFormAndValidation } from "../hooks/useFormAndValidation";
 
-const Register = ({ onRegister }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  }
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  }
+const Register = (props) => {
+  const { 
+    values, 
+    errors, 
+    isValid, 
+    handleChange, 
+    setValues, 
+    resetForm 
+  } = useFormAndValidation();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onRegister(email, password);
+    props.onRegister(values.email, values.password);
   }
 
+  useEffect(() => {
+    setValues({ 
+      email: '',
+      password: ''});
+    resetForm();
+  }, [setValues, resetForm]);
+
   return (
-    <form className="login__form" onSubmit={handleSubmit}>
+    <form className="popup__form login__form" onSubmit={handleSubmit} noValidate>
       <h2 className="popup__title login__title">Регистрация</h2>
       <input
         className="popup__input login__input"
         type="email"
-        name="register-email"
+        id="email-input"
+        name="email"
         placeholder="Email"
-        value={email || ""}
-        onChange={handleEmailChange}
+        value={values.email || ''}
+        onChange={handleChange}
+        minLength="2"
+        maxLength="25"
         required
       />
+      <span className='email-input-error popup__input-error popup__error'>{errors.email}</span> 
       <input
         className="popup__input login__input"
         type="password"
-        name="register-password"
+        id="password-input"
+        name="password"
         placeholder="Пароль"
-        value={password || ""}
-        onChange={handlePasswordChange}
+        value={values.password || ''}
+        onChange={handleChange}
+        minLength="5"
         required
       />
-      <button className="popup__button-save login__button" type="submit">Зарегистрироваться</button>
+      <span className='password-input-error popup__input-error popup__error'>{errors.password}</span>
+      <button className="popup__button-save login__button" type="submit" disabled={!isValid}>Зарегистрироваться</button>
       <p className="login__text">
         <Link className="login__text" to="/sign-in">Уже зарегистрированы? Войти</Link>
       </p>

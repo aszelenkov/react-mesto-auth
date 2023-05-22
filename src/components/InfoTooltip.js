@@ -3,7 +3,7 @@ import successImg from '../images/success.svg';
 import errorImg from '../images/error.svg';
 import { usePopupClose } from '../hooks/usePopupClose';
 
-function InfoTooltip({ isOpen, onClose, isSuccess }) {
+function InfoTooltip({ isOpen, onClose, isSuccess, successMessage, errorMessage }) {
   usePopupClose(isOpen, onClose);
 
   return (
@@ -16,17 +16,11 @@ function InfoTooltip({ isOpen, onClose, isSuccess }) {
           aria-label='Закрыть pop-up'>
         </button>
         <img className='popup__status' 
-          src={`${ isSuccess 
-            ? successImg 
-            : errorImg}`} 
-          alt={`${ isSuccess 
-            ? 'Успешно' 
-            : 'Ошибка'}`} 
+          src={isSuccess ? successImg : errorImg} 
+          alt={isSuccess ? 'Успешно' : 'Ошибка'} 
         />
         <h2 className='popup__title popup__text'>
-          {`${isSuccess 
-            ? 'Вы успешно зарегистрировались!' 
-            : 'Что-то пошло не так! Попробуйте еще раз.'}`}
+          {isSuccess ? successMessage : errorMessage}
         </h2>
       </div>
     </div>
