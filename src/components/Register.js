@@ -25,8 +25,13 @@ const Register = (props) => {
   }, [setValues, resetForm]);
 
   return (
-    <form className="popup__form login__form" onSubmit={handleSubmit} noValidate>
-      <h2 className="popup__title login__title">Регистрация</h2>
+    <form 
+      className="popup__form login__form" 
+      onSubmit={handleSubmit} 
+      noValidate>
+      <h2 className="popup__title login__title">
+        Регистрация
+      </h2>
       <input
         className="popup__input login__input"
         type="email"
@@ -39,7 +44,10 @@ const Register = (props) => {
         maxLength="25"
         required
       />
-      <span className='email-input-error popup__input-error popup__error'>{errors.email}</span> 
+      <span 
+        className='email-input-error popup__input-error popup__error'>
+          {errors.email}
+      </span> 
       <input
         className="popup__input login__input"
         type="password"
@@ -51,10 +59,22 @@ const Register = (props) => {
         minLength="5"
         required
       />
-      <span className='password-input-error popup__input-error popup__error'>{errors.password}</span>
-      <button className="popup__button-save login__button" type="submit" disabled={!isValid}>Зарегистрироваться</button>
+      <span 
+        className='password-input-error popup__input-error popup__error'>
+          {errors.password}
+      </span>
+      <button 
+        className="popup__button-save login__button" 
+        type="submit" 
+        disabled={!isValid}>
+          Зарегистрироваться
+      </button>
       <p className="login__text">
-        <Link className="login__text" to="/sign-in">Уже зарегистрированы? Войти</Link>
+        <Link 
+          className="login__text" 
+          to="/sign-in">
+            Уже зарегистрированы? Войти
+        </Link>
       </p>
     </form>
   )

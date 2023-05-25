@@ -44,6 +44,7 @@ function App() {
   const [deletedCard, setDeletedCard] = useState(null);
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [loggedIn, setLoggedIn] = useState(false);
   const [email, setEmail] = useState("");
@@ -88,16 +89,19 @@ function App() {
   };
 
   const handleCardDelete = (card) => {
+    setIsLoading(true);
     api
       .deleteCard(card._id)
       .then(() => {
         setCards(cards.filter((c) => c._id !== card._id));
         closeAllPopups();
       })
-      .catch(handleError) 
+      .catch(handleError)
+      .finally(() => setIsLoading(false));
   };
 
   const handleUpdateAvatar = ({avatar}) => {
+    setIsLoading(true);
     api
       .editAvatar(avatar)
       .then((res) => {
@@ -105,9 +109,11 @@ function App() {
         closeAllPopups();
       })
       .catch(handleError)
+      .finally(() => setIsLoading(false));
   };
 
   const handleUpdateUser = ({ name, about }) => {
+    setIsLoading(true);
     api
     .setUserInfo({ name: name, about: about })
     .then((res) => {
@@ -115,9 +121,11 @@ function App() {
       closeAllPopups();
     })
     .catch(handleError)
+    .finally(() => setIsLoading(false));
   };
 
   const handleAddPlaceSubmit = ({ name, link }) => {
+    setIsLoading(true);
     api
       .setItem({ name: name, link: link })
       .then((newCard) => {
@@ -125,6 +133,7 @@ function App() {
         closeAllPopups();
       })
       .catch(handleError)
+      .finally(() => setIsLoading(false));
   }
 
   const handleConfirmRegister = (ok) => {
@@ -135,15 +144,12 @@ function App() {
 
   const handleRegister = (email, password) => {
     auth.register(email, password)
-      .then((res) => {
-        if (res) {
-          handleConfirmRegister(true)
-          navigate('./sign-in')
-        } else {
-          handleConfirmRegister(false);
-        }
+      .then(() => {
+        handleConfirmRegister(true)
+        navigate('./sign-in')
       })
       .catch((err) => {
+        handleConfirmRegister(false);
         console.error(`Ошибка: ${err}`);
       })
   }
@@ -157,6 +163,7 @@ function App() {
         navigate("/");
       })
       .catch((err) => {
+        handleConfirmRegister(false);
         console.error(`Ошибка: ${err}`);
       });
   };
@@ -244,18 +251,21 @@ function App() {
       <EditAvatarPopup 
         onUpdateAvatar={handleUpdateAvatar} 
         isOpen={popups.isEditAvatarPopupOpen} 
+        isLoading={isLoading}
         onClose={closeAllPopups} 
       />
 
       <EditProfilePopup 
         onUpdateUser={handleUpdateUser} 
         isOpen={popups.isEditProfilePopupOpen} 
+        isLoading={isLoading}
         onClose={closeAllPopups} 
       /> 
 
       <AddPlacePopup 
         onAddPlace={handleAddPlaceSubmit} 
         isOpen={popups.isAddPlacePopupOpen} 
+        isLoading={isLoading}
         onClose={closeAllPopups} 
       />
 
@@ -263,6 +273,7 @@ function App() {
         onDeleteCard={handleCardDelete} 
         isOpen={popups.isDeleteCardPopupOpen} 
         deletedCard={deletedCard}
+        isLoading={isLoading}
         onClose={closeAllPopups}
       />
       </>
@@ -280,8 +291,7 @@ function App() {
         onClose={closeAllPopups}
         successMessage="Вы успешно зарегистрировались!" 
         errorMessage="Что-то пошло не так! Попробуйте еще раз."
-      />
-      
+      />      
     </div>
     </CurrentUserContext.Provider>
   );

@@ -24,8 +24,14 @@ const Login = (props) => {
   }, [setValues, resetForm]);
 
   return (
-    <form className="popup__form login__form" onSubmit={handleSubmit} noValidate>
-      <h2 className="popup__title login__title">Вход</h2>
+    <form 
+      className="popup__form login__form" 
+      onSubmit={handleSubmit} 
+      noValidate
+    >
+      <h2 className="popup__title login__title">
+        Вход
+      </h2>
       <input
         className="popup__input login__input"
         type="email"
@@ -38,7 +44,9 @@ const Login = (props) => {
         maxLength="25"
         required
       />
-      <span className='email-input-error popup__input-error popup__error'>{errors.email}</span> 
+      <span className='email-input-error popup__input-error popup__error'>
+        {errors.email}
+      </span> 
       <input
         className="popup__input login__input"
         type="password"
@@ -51,8 +59,16 @@ const Login = (props) => {
         maxLength="40"
         required
       />
-      <span className='password-input-error popup__input-error popup__error'>{errors.password}</span>
-      <button className="popup__button-save login__button" type="submit" disabled={!isValid}>Войти</button>
+      <span className='password-input-error popup__input-error popup__error'>
+        {errors.password}
+      </span>
+      <button 
+        className="popup__button-save login__button" 
+        type="submit" 
+        disabled={!isValid}
+      >
+        Войти
+      </button>
     </form>
   )
 };

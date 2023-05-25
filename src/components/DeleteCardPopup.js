@@ -13,7 +13,7 @@ function DeleteCardPopup(props) {
         isOpen={props.isOpen}
         onClose={props.onClose}
         onSubmit={handleSubmit}
-        submitButtonText='Да'
+        submitButtonText={props.isLoading ? "Удаление..." : "Да"}
         isValid={true}
     />
   )  

@@ -31,7 +31,7 @@ function EditAvatarPopup(props) {
         isOpen={props.isOpen}
         onClose={props.onClose}
         onSubmit={handleSubmit}
-        submitButtonText='Сохранить'
+        submitButtonText={props.isLoading ? "Сохранение..." : "Сохранить"}
         isValid={isValid}
       >
         <input

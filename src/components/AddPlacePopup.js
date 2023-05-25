@@ -2,7 +2,7 @@ import PopupWithForm from "./PopupWithForm";
 import { useEffect } from "react"; 
 import { useFormAndValidation } from "../hooks/useFormAndValidation"; 
 
-function AddPlacePopup({ isOpen, onClose, onAddPlace }) { 
+function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) { 
   const {  
     values,  
     errors,  
@@ -31,7 +31,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
         name='item' 
         isOpen={isOpen} 
         onClose={onClose} 
-        submitButtonText='Создать' 
+        submitButtonText={isLoading ? "Сохранение..." : "Создать"}
         onSubmit={handleSubmit} 
         isValid={isValid} 
       > 
