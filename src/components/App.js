@@ -15,45 +15,28 @@ import Login from "./Login";
 import Register from "./Register";
 import InfoTooltip from "./InfoTooltip";
 import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
+import { usePopupState } from '../hooks/customHooks';
 
 function App() {
-
-  const [popups, setPopups] = useState({
-    isEditAvatarPopupOpen: false,
-    isEditProfilePopupOpen: false,
-    isAddPlacePopupOpen: false,
-    isPhotoViewPopupOpen: false,
-    isDeleteCardPopupOpen: false,
-    isInfoTooltipPopupOpen: false,
-  });
-
-  const closeAllPopups = () => {
-    setPopups({
-      isEditAvatarPopupOpen: false,
-      isEditProfilePopupOpen: false,
-      isAddPlacePopupOpen: false,
-      isPhotoViewPopupOpen: false,
-      isDeleteCardPopupOpen: false,
-      isInfoTooltipPopupOpen: false,
-    });
-    setSelectedCard(null);
-    setDeletedCard(null);
-  };
 
   const [selectedCard, setSelectedCard] = useState(null);
   const [deletedCard, setDeletedCard] = useState(null);
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
   const [loggedIn, setLoggedIn] = useState(false);
   const [email, setEmail] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const navigate = useNavigate();
 
-  const handlePopupStateChange = (popup, state) => {
-    setPopups({ ...popups, [popup]: state });
-  };
+  const { state: popups, closeAllPopups, handlePopupStateChange } = usePopupState({
+    isEditAvatarPopupOpen: false,
+    isEditProfilePopupOpen: false,
+    isAddPlacePopupOpen: false,
+    isPhotoViewPopupOpen: false,
+    isDeleteCardPopupOpen: false,
+    isInfoTooltipPopupOpen: false,
+  }, setSelectedCard, setDeletedCard);
 
   const handleError = (err) => console.log(`Ошибка: ${err}`);
 
@@ -70,77 +53,69 @@ function App() {
 
   const handleCardClick = (card) => {
     setSelectedCard(card);
-    setPopups({ ...popups, isPhotoViewPopupOpen: true });
+    handlePopupStateChange('isPhotoViewPopupOpen', true);
   };
 
   const handleDeleteCardClick = (card) => {
     setDeletedCard(card);
-    setPopups({ ...popups, isDeleteCardPopupOpen: true });
+    handlePopupStateChange('isDeleteCardPopupOpen', true);
+  };
+
+  const handleConfirmRegister = (ok) => {
+    handlePopupStateChange('isInfoTooltipPopupOpen', true);
+    setIsSuccess(ok)
+  }
+
+  const apiRequestHandler = async (apiFunc, successFunc) => {
+    try {
+      setIsLoading(true);
+      const result = await apiFunc();
+      successFunc(result);
+      closeAllPopups();
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCardLike = (card) => {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
-    api
-      .changeLikeCardStatus(card._id, isLiked)
-      .then((newCard) => {
-        setCards((state) => state.map((c) => c._id === card._id ? newCard : c))
-      })
-      .catch(handleError);
+    apiRequestHandler(
+      () => api.changeLikeCardStatus(card._id, isLiked),
+      (newCard) => setCards((state) => state.map((c) => c._id === card._id ? newCard : c))
+    );
   };
 
   const handleCardDelete = (card) => {
-    setIsLoading(true);
-    api
-      .deleteCard(card._id)
-      .then(() => {
+    apiRequestHandler(
+      () => api.deleteCard(card._id),
+      () => {
         setCards(cards.filter((c) => c._id !== card._id));
-        closeAllPopups();
-      })
-      .catch(handleError)
-      .finally(() => setIsLoading(false));
+      }
+    );
   };
-
-  const handleUpdateAvatar = ({avatar}) => {
-    setIsLoading(true);
-    api
-      .editAvatar(avatar)
-      .then((res) => {
-        setCurrentUser(res);
-        closeAllPopups();
-      })
-      .catch(handleError)
-      .finally(() => setIsLoading(false));
+  
+  const handleUpdateAvatar = ({ avatar }) => {
+    apiRequestHandler(
+      () => api.editAvatar(avatar),
+      setCurrentUser
+    );
   };
-
+  
   const handleUpdateUser = ({ name, about }) => {
-    setIsLoading(true);
-    api
-    .setUserInfo({ name: name, about: about })
-    .then((res) => {
-      setCurrentUser(res);
-      closeAllPopups();
-    })
-    .catch(handleError)
-    .finally(() => setIsLoading(false));
+    apiRequestHandler(
+      () => api.setUserInfo({ name, about }),
+      setCurrentUser
+    );
   };
-
+  
   const handleAddPlaceSubmit = ({ name, link }) => {
-    setIsLoading(true);
-    api
-      .setItem({ name: name, link: link })
-      .then((newCard) => {
-        setCards((cards) => [newCard, ...cards]);
-        closeAllPopups();
-      })
-      .catch(handleError)
-      .finally(() => setIsLoading(false));
-  }
-
-  const handleConfirmRegister = (ok) => {
-    setPopups({ ...popups, isInfoTooltipPopupOpen: true })
-    setIsSuccess(ok)
-    
-  }
+    apiRequestHandler(
+      () => api.setItem({ name, link }),
+      (newCard) => setCards((cards) => [newCard, ...cards])
+    );
+  };
 
   const handleRegister = (email, password) => {
     auth.register(email, password)

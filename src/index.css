@@ -64,8 +64,6 @@
 @import url('./blocks/login/__input/login__input.css');
 @import url('./blocks/login/__button/login__button.css');
 @import url('./blocks/login/__text/login__text.css');
-
-
 /* Подвал сайта */
 @import url('./blocks/footer/footer.css');
 @import url('./blocks/footer/__copyright/footer__copyright.css');
